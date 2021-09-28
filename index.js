@@ -3,15 +3,19 @@ const path = require("path");
 const fs = require("fs");
 
 const server = http.createServer((req, res) => {
-  let filePath = path.join(
+  const fileName = req.url.slice(1).endsWith(".css")
+    ? req.url
+    : `${req.url}.html`;
+
+  const filePath = path.join(
     __dirname,
     "public",
-    req.url === "/" ? "index.html" : req.url
+    req.url === "/" ? "index.html" : fileName
   );
 
-  let extName = path.extname(filePath);
+  const extName = path.extname(filePath);
 
-  let contentType = extName == ".html" ? "text/html" : "text/css";
+  const contentType = extName == ".html" ? "text/html" : "text/css";
 
   fs.readFile(filePath, (err, content) => {
     if (err) {
